@@ -110,7 +110,7 @@ public class HashMap<K, T> {
             //Searching for last one or equal key
             do {
                 //If key is equal replacing return value
-                if (entry.getKey().equals(key)) {
+                if (entry.getKey() == key || entry.getKey().equals(key)) {
                     return entry.getValue();
                 }
             } while (entry.getNext() != null);
@@ -173,7 +173,7 @@ public class HashMap<K, T> {
      * @param collection Collection of entry to add
      */
     public void putAll(Collection<Entry<K, T>> collection) {
-        if (collection.size() < (capacity - size)) {
+        if (collection.size() > (capacity - size)) {
             while ((capacity - size) < collection.size()) {
                 capacity = capacity * 2;
             }
@@ -278,10 +278,15 @@ public class HashMap<K, T> {
 
                     return prevEntryValue;
                 }
-            } while (prevEntry.getNext() != null);
 
-            //Set new entry on chain end
-            prevEntry.setNext(new Entry<K, T>(key, value));
+                //Set new entry on chain end
+                if (prevEntry.getNext() == null) {
+                    prevEntry.setNext(new Entry<K, T>(key, value));
+                    prevEntry = prevEntry.getNext();
+                }
+
+                prevEntry = prevEntry.getNext();
+            } while (prevEntry != null);
         }
 
         size++;

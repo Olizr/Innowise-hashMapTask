@@ -1,3 +1,10 @@
+import java.util.Objects;
+
+/**
+ * Class for key-value pair
+ * @param <K> Key type
+ * @param <V> Value type
+ */
 public class Entry<K, V> {
     private K key;
     private V value;
@@ -32,5 +39,19 @@ public class Entry<K, V> {
 
     public void setNext(Entry<K, V> next) {
         this.next = next;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Entry<?, ?> entry = (Entry<?, ?>) o;
+        return Objects.equals(key, entry.key) &&
+                Objects.equals(value, entry.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(key, value);
     }
 }
